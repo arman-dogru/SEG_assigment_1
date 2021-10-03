@@ -30,8 +30,9 @@ public class PointCPTest
    *                cartesian.
    * @param args[1] The value of X or RHO.
    * @param args[2] The value of Y or THETA.
+   * @throws IOException
    */
-  public static void main(String[] args)
+  public static void main(String[] args) throws IOException
   {
     PointCP point;
 
@@ -41,19 +42,6 @@ public class PointCPTest
     // If he did, create the PointCP object from these arguments.
     // If he did not, prompt the user for them.
     try
-    {
-      point = new PointCP(args[0].toUpperCase().charAt(0), 
-        Double.valueOf(args[1]).doubleValue(), 
-        Double.valueOf(args[2]).doubleValue());
-    }
-    catch(Exception e)
-    {
-      // If we arrive here, it is because either there were no
-      // command line arguments, or they were invalid
-      if(args.length != 0)
-        System.out.println("Invalid arguments on command line");
-
-      try
       {
         point = getInput();
       }
@@ -62,14 +50,9 @@ public class PointCPTest
         System.out.println("Error getting input. Ending program.");
         return;
       }
-    }
-    System.out.println("\nYou entered:\n" + point);
-    point.convertStorageToCartesian();
-    System.out.println("\nAfter asking to store as Cartesian:\n" + point);
-    point.convertStorageToPolar();
-    System.out.println("\nAfter asking to store as Polar:\n" + point);
-  }
 
+      point = getInput();
+    }
   /**
    * This method obtains input from the user and verifies that
    * it is valid.  When the input is valid, it returns a PointCP
@@ -158,6 +141,11 @@ public class PointCPTest
       isOK = false;
     }
     //Return a new PointCP object
-    return (new PointCP(coordType, a, b));
+    if (coordType == "C".toCharArray()[0]) {
+      PointCP pCP = new PointCPDesign3(a, b);
+      return pCP;
+    }
+    PointCP pCP = new PointCPDesign2(a, b);
+    return pCP;
   }
 }
